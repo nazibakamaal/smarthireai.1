@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartHire AI – Screening Results</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card-bg: #ffffff;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --accent-dark: #1d4ed8;
+      --text-main: #0f172a;
+      --text-muted: #6b7280;
+      --border-subtle: #e5e7eb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top left, #e0edff 0, #f5f7fb 45%, #ffffff 100%);
+      padding: 24px;
+      color: var(--text-main);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      padding: 32px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 650;
+      letter-spacing: 0.01em;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .job-preview {
+      background: #f9fafb;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .top-candidates {
+      margin-bottom: 28px;
+    }
+
+    .top-candidates h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .candidate-card {
+      background: linear-gradient(135deg, rgba(219, 234, 254, 0.35), rgba(248, 250, 252, 0.9));
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .candidate-card .rank {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .candidate-card .name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .candidate-card .score {
+      font-weight: 700;
+      color: var(--accent-dark);
+      font-size: 1rem;
+    }
+
+    .all-results h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .result-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 0.9rem;
+    }
+
+    .result-row:last-child {
+      border-bottom: none;
+    }
+
+    .result-row .filename {
+      font-weight: 500;
+    }
+
+    .result-row .score {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 24px;
+      padding: 10px 20px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--accent-dark);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      transition: background 0.18s ease, transform 0.1s ease;
+    }
+
+    .back-link:hover {
+      background: #eff6ff;
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Screening Results</h1>
+    <p class="subtitle">Candidates ranked by match score against the job description.</p>
+
+    <div class="job-preview">
+      <strong>Job description:</strong><br />
+      {{ job_description_preview }}
+    </div>
+
+    <div class="top-candidates">
+      <h2>Top candidates</h2>
+      {% for c in top_candidates %}
+      <div class="candidate-card">
+        <span class="rank">#{{ c.rank }}</span>
+        <span class="name">{{ c.filename }}</span>
+        <span class="score">{{ "%.1f"|format(c.score) }}%</span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="all-results">
+      <h2>All results</h2>
+      {% for r in results %}
+      <div class="result-row">
+        <span class="filename">{{ r.filename }}</span>
+        <span class="score">{{ "%.1f"|format(r.score) }}%</span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <a href="{{ url_for('index') }}" class="back-link">← Screen more resumes</a>
+  </div>
+</body>
+</html>
