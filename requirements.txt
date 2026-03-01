@@ -4,3 +4,4 @@ pandas
 nltk
 pdfplumber
 numpy
+gunicorn
